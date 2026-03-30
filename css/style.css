@@ -1,97 +1,89 @@
-/* css/style.css */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-    --bg-dark: #121212;
-    --bg-panel: #1E1E1E;
-    --text-main: #F3F4F6;
-    --text-muted: #9CA3AF;
-    --gold: #D4AF37;
-    --gold-glow: rgba(212, 175, 55, 0.3);
-    --border-subtle: #333333;
+    --bg-desk: #F0F2F5;
+    --surface: #FFFFFF;
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --accent: #3B82F6;
+    --danger: #EF4444;
+    --border: #E5E7EB;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: var(--bg-desk); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; }
 
-body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
-    font-family: 'Inter', sans-serif;
-    /* Subtle noise texture for realism */
-    background-image: radial-gradient(circle at center, #1f1f1f 0%, #0a0a0a 100%);
-    min-height: 100vh;
-}
+/* --- Views & Layout --- */
+.view { display: none; opacity: 0; transition: opacity 0.3s ease; }
+.view.active { display: block; opacity: 1; animation: popIn 0.4s ease forwards; }
+@keyframes popIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
 
-/* --- Views & Animations --- */
-.view { display: none; opacity: 0; transition: opacity 0.5s ease; }
-.view.active { display: block; opacity: 1; animation: fadeIn 0.6s ease forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* --- Navbar --- */
-.museum-nav {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 20px 40px; border-bottom: 1px solid var(--border-subtle);
-    background: rgba(18, 18, 18, 0.8); backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 100;
-}
-.nav-logo { font-size: 24px; font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+/* --- Intuitive Navbar --- */
+.nav { background: var(--surface); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+.nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.profile-pill { display: flex; align-items: center; gap: 10px; background: var(--bg-desk); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
+.profile-pill:hover { background: #E5E7EB; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; }
+.logout-icon { font-size: 18px; }
 
 /* --- Buttons --- */
-.btn-gold {
-    background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7);
-    color: #000; font-weight: 600; padding: 12px 28px; border: none; border-radius: 4px;
-    cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif;
-    box-shadow: 0 4px 15px var(--gold-glow);
-}
-.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5); }
-.btn-dark {
-    background: var(--bg-panel); color: var(--text-main); border: 1px solid var(--border-subtle);
-    padding: 10px 20px; border-radius: 4px; cursor: pointer; transition: 0.3s;
-}
-.btn-dark:hover { border-color: var(--text-muted); }
+.btn { background: var(--text-main); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
-/* --- The Artifact Display Grid --- */
-.container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
-.artifact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
+/* --- PHYSICAL COLLECTIBLE SHAPES --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; margin-top: 24px; }
 
-/* The Realistic Artifact Card */
-.artifact-card {
-    background: var(--bg-panel); border: 1px solid var(--border-subtle);
-    border-radius: 8px; padding: 24px; position: relative; overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); cursor: pointer; transition: transform 0.3s, border-color 0.3s;
-}
-.artifact-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+.item-wrapper { position: relative; cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; }
+.item-wrapper:hover { transform: translateY(-4px); z-index: 10; }
 
-/* Holographic Shine Effect */
-.artifact-card::after {
-    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-20deg); transition: 0.7s;
+/* 1. The Coin (Round, Metallic) */
+.item-coin {
+    width: 160px; height: 160px; border-radius: 50%;
+    background: linear-gradient(135deg, #e6c27a 0%, #d4af37 50%, #aa8c2c 100%);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 15px rgba(0,0,0,0.2);
+    display: flex; justify-content: center; align-items: center; padding: 20px; text-align: center; border: 4px solid #c9a52f;
 }
-.artifact-card:hover::after { left: 200%; }
 
-.artifact-category { font-size: 12px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-.artifact-name { font-size: 24px; margin-bottom: 16px; color: #FFF; line-height: 1.2; }
-.artifact-value { font-size: 18px; font-weight: 300; color: var(--text-muted); border-top: 1px solid var(--border-subtle); padding-top: 16px; margin-top: 16px; }
-.value-highlight { color: #FFF; font-weight: 600; font-family: 'Inter', sans-serif; }
+/* 2. The Note (Paper Rectangle) */
+.item-note {
+    width: 220px; height: 110px; border-radius: 4px;
+    background: #f4f1e1; /* Old paper color */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border: 1px solid #dcd8c0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
+}
 
-/* --- Modals --- */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-    display: none; justify-content: center; align-items: center; z-index: 200;
+/* 3. The Sticker (Thick white border, glossy) */
+.item-sticker {
+    width: 150px; height: 150px; border-radius: 12px;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    border: 6px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    padding: 15px; text-align: center; display: flex; align-items: center; justify-content: center;
 }
-.modal-overlay.active { display: flex; }
-.modal-content {
-    background: var(--bg-panel); width: 100%; max-width: 500px; border-radius: 8px;
-    border: 1px solid var(--border-subtle); padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-}
-.input-group { margin-bottom: 20px; }
-.input-group label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; }
-.input-group input, .input-group select {
-    width: 100%; padding: 12px; background: var(--bg-dark); color: #FFF;
-    border: 1px solid var(--border-subtle); border-radius: 4px; font-size: 16px; outline: none;
-}
-.input-group input:focus, .input-group select:focus { border-color: var(--gold); }
+.item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 50%); border-radius: 6px; }
+
+/* Universal Item Info Base */
+.item-name { font-weight: 800; font-size: 16px; line-height: 1.2; color: #111; text-shadow: 0 1px 0 rgba(255,255,255,0.5); z-index: 2; }
+.item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: white; font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+.item-rarity { position: absolute; bottom: -15px; background: var(--surface); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
+
+/* Rarity Colors */
+.rare-common { color: #6B7280; }
+.rare-uncommon { color: #10B981; }
+.rare-rare { color: #3B82F6; }
+.rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: #F3E8FF; }
+
+/* --- Details Modal --- */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
+.modal.active { display: flex; }
+.modal-content { background: var(--surface); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.input-group { margin-bottom: 16px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 15px; }
+
+/* --- Premium Footer --- */
+.footer { margin-top: 60px; padding: 30px 20px; background: var(--surface); border-top: 1px solid var(--border); text-align: center; }
+.manifesto { max-width: 600px; margin: 0 auto 15px auto; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
