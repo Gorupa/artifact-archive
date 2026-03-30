@@ -1,122 +1,453 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Archives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =======================================
+           1. THE STYLES (CSS)
+           ======================================= */
+        :root {
+            --bg-surface: #F0F2F5; 
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --accent: #3B82F6;
+            --danger: #EF4444;
+            --border: #E5E7EB;
+            --panel: #FFFFFF;
+        }
 
-:root {
-    /* Default Desk Theme */
-    --bg-surface: #F0F2F5; 
-    --text-main: #111827;
-    --text-muted: #6B7280;
-    --accent: #3B82F6;
-    --danger: #EF4444;
-    --border: #E5E7EB;
-    --panel: #FFFFFF;
-}
+        /* Milestone Container Themes */
+        body[data-container="desk"] { --bg-surface: #F0F2F5; }
+        body[data-container="diary"] { --bg-surface: #Fdfbf7; background-image: repeating-linear-gradient(transparent, transparent 29px, #e5e7eb 30px); }
+        body[data-container="box"] { --bg-surface: #3e2723; --text-main: #f5f5f5; --text-muted: #bcaaa4; --panel: #4e342e; --border: #5d4037; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 40px); }
+        body[data-container="suitcase"] { --bg-surface: #263238; --text-main: #eceff1; --text-muted: #90a4ae; --panel: #37474f; --border: #455a64; background-image: radial-gradient(#111 15%, transparent 16%); background-size: 8px 8px; }
 
-/* Container Themes (Unlocked via Milestones) */
-body[data-container="desk"] { --bg-surface: #F0F2F5; }
-body[data-container="diary"] { --bg-surface: #Fdfbf7; background-image: repeating-linear-gradient(transparent, transparent 29px, #e5e7eb 30px); }
-body[data-container="box"] { --bg-surface: #3e2723; --text-main: #f5f5f5; --text-muted: #bcaaa4; --panel: #4e342e; --border: #5d4037; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 40px); }
-body[data-container="suitcase"] { --bg-surface: #263238; --text-main: #eceff1; --text-muted: #90a4ae; --panel: #37474f; --border: #455a64; background-image: radial-gradient(#111 15%, transparent 16%); background-size: 8px 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-surface); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; transition: background 0.5s ease; min-height: 100vh; }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-body { background-color: var(--bg-surface); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; transition: background 0.5s ease; min-height: 100vh; }
+        .view { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .view.active { display: block; opacity: 1; animation: popIn 0.4s ease forwards; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-/* --- Views & Layout --- */
-.view { display: none; opacity: 0; transition: opacity 0.3s ease; }
-.view.active { display: block; opacity: 1; animation: popIn 0.4s ease forwards; }
-@keyframes popIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-.flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .nav { background: var(--panel); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; transition: background 0.5s; }
+        .nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .profile-pill { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.05); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
+        .profile-pill:hover { background: rgba(0,0,0,0.1); }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; }
 
-/* --- Intuitive Navbar --- */
-.nav { background: var(--panel); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; transition: background 0.5s; }
-.nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-.profile-pill { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.05); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
-.profile-pill:hover { background: rgba(0,0,0,0.1); }
-.avatar { width: 32px; height: 32px; border-radius: 50%; }
+        .milestone-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; gap: 12px; overflow-x: auto; }
+        .container-lock { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; text-align: center; border: 2px dashed var(--border); opacity: 0.5; transition: 0.3s; position: relative; }
+        .container-lock.unlocked { border: 2px solid var(--accent); opacity: 1; cursor: pointer; background: rgba(59, 130, 246, 0.05); }
+        .container-lock.active-container { background: var(--accent); color: white; border-style: solid; }
+        .lock-title { font-size: 12px; font-weight: 700; text-transform: uppercase; margin-top: 8px; }
 
-/* --- Milestone Tracker --- */
-.milestone-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; gap: 12px; overflow-x: auto; }
-.container-lock { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; text-align: center; border: 2px dashed var(--border); opacity: 0.5; transition: 0.3s; position: relative; }
-.container-lock.unlocked { border: 2px solid var(--accent); opacity: 1; cursor: pointer; background: rgba(59, 130, 246, 0.05); }
-.container-lock.active-container { background: var(--accent); color: white; border-style: solid; }
-.lock-icon { font-size: 24px; margin-bottom: 8px; }
-.lock-title { font-size: 12px; font-weight: 700; text-transform: uppercase; }
+        .btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
-/* --- Buttons --- */
-.btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 24px; }
+        .item-wrapper { position: relative; cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; }
+        .item-wrapper:hover { transform: translateY(-4px); z-index: 10; }
 
-/* --- PHYSICAL COLLECTIBLE SHAPES --- */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 24px; }
-.item-wrapper { position: relative; cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; }
-.item-wrapper:hover { transform: translateY(-4px); z-index: 10; }
+        /* Physical Shapes */
+        .item-coin { width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b); box-shadow: inset 0 0 10px rgba(0,0,0,0.4), inset 0 0 2px 4px rgba(255,255,255,0.3), 0 8px 15px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; border: 3px solid #da9a00; }
+        .coin-flag { font-size: 32px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); margin-bottom: 4px; }
+        .coin-value { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #4a3600; text-shadow: 1px 1px 0px rgba(255,255,255,0.4); }
 
-/* 1. Generic Legal Coin */
-.item-coin {
-    width: 150px; height: 150px; border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.4), inset 0 0 2px 4px rgba(255,255,255,0.3), 0 8px 15px rgba(0,0,0,0.3);
-    display: flex; flex-direction: column; justify-content: center; align-items: center; border: 3px solid #da9a00;
-}
-.coin-flag { font-size: 32px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); margin-bottom: 4px; }
-.coin-value { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #4a3600; text-shadow: 1px 1px 0px rgba(255,255,255,0.4); }
+        .item-note { width: 220px; height: 105px; border-radius: 2px; background: #eef2eb; box-shadow: 0 4px 10px rgba(0,0,0,0.15); border: 1px solid #cdd5c5; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 22px); }
+        .note-corners { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-weight: 700; color: #2e4a23; font-size: 14px; }
+        .note-center { text-align: center; font-size: 28px; filter: grayscale(20%); }
 
-/* 2. Generic Legal Banknote */
-.item-note {
-    width: 220px; height: 105px; border-radius: 2px;
-    background: #eef2eb; /* Money paper */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    border: 1px solid #cdd5c5; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 22px);
-}
-.note-corners { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-weight: 700; color: #2e4a23; font-size: 14px; }
-.note-center { text-align: center; font-size: 28px; filter: grayscale(20%); }
+        .item-sticker { width: 140px; height: 190px; border-radius: 8px; background: linear-gradient(135deg, #FF0055 0%, #0011FF 100%); border: 5px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent); }
+        .sticker-franchise { font-family: 'Bangers', sans-serif; font-size: 24px; color: white; text-transform: uppercase; text-shadow: 2px 2px 0 #000; transform: rotate(-5deg); z-index: 2; text-align: center; line-height: 1; padding: 0 10px; }
 
-/* 3. Pop-Culture Sticker/Card */
-.item-sticker {
-    width: 140px; height: 190px; border-radius: 8px;
-    background: linear-gradient(135deg, #FF0055 0%, #0011FF 100%);
-    border: 5px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden;
-}
-.item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent); }
-.sticker-franchise { font-family: 'Bangers', sans-serif; font-size: 24px; color: white; text-transform: uppercase; text-shadow: 2px 2px 0 #000; transform: rotate(-5deg); z-index: 2; text-align: center; line-height: 1; padding: 0 10px; }
+        .item-stamp { width: 120px; height: 140px; background: #fff; padding: 8px; display: flex; flex-direction: column; justify-content: space-between; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); background-image: radial-gradient(#fff 50%, transparent 50%); background-size: 10px 10px; background-position: -5px -5px; border: 4px dashed #ccc; }
+        .stamp-inner { background: #1a365d; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; color: white; font-family: 'Space Mono'; font-size: 20px; }
 
-/* 4. Stamp (World Record / Global) */
-.item-stamp {
-    width: 120px; height: 140px; background: #fff;
-    padding: 8px; display: flex; flex-direction: column; justify-content: space-between;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
-    /* CSS Perforated Edges */
-    background-image: radial-gradient(#fff 50%, transparent 50%); background-size: 10px 10px; background-position: -5px -5px;
-    border: 4px dashed #ccc;
-}
-.stamp-inner { background: #1a365d; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; color: white; font-family: 'Space Mono'; font-size: 20px; }
+        .item-details-tag { margin-top: 12px; text-align: center; width: 100%; }
+        .item-name { font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--text-main); }
+        .item-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: var(--panel); font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+        
+        .item-rarity { position: absolute; bottom: 45px; background: var(--panel); color: var(--text-main); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
+        .rare-common { color: #6B7280; }
+        .rare-uncommon { color: #10B981; }
+        .rare-rare { color: #3B82F6; }
+        .rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: rgba(139, 92, 246, 0.1); }
 
-/* Universal Item Info Base */
-.item-details-tag { margin-top: 12px; text-align: center; width: 100%; }
-.item-name { font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--text-main); }
-.item-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-.item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: var(--panel); font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
-.item-rarity { position: absolute; bottom: 45px; background: var(--panel); color: var(--text-main); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--panel); color: var(--text-main); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
+        
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); border-radius: 6px; outline: none; font-size: 15px; }
 
-.rare-common { color: #6B7280; }
-.rare-uncommon { color: #10B981; }
-.rare-rare { color: #3B82F6; }
-.rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: rgba(139, 92, 246, 0.1); }
+        .dyn-group { display: none; }
+        .dyn-group.active { display: block; animation: popIn 0.3s ease; }
 
-/* --- Modals --- */
-.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
-.modal.active { display: flex; }
-.modal-content { background: var(--panel); color: var(--text-main); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
-.input-group { margin-bottom: 16px; }
-.input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-.input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); border-radius: 6px; outline: none; font-size: 15px; }
+        .footer { margin-top: 60px; padding: 30px 20px; background: var(--panel); border-top: 1px solid var(--border); text-align: center; }
+        .manifesto { max-width: 600px; margin: 0 auto 15px auto; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    </style>
+</head>
+<body data-container="desk">
 
-/* Dynamic Form Groups */
-.dyn-group { display: none; }
-.dyn-group.active { display: block; animation: popIn 0.3s ease; }
+    <div id="view-login" class="view active">
+        <div class="container" style="text-align: center; margin-top: 15vh;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🧳</div>
+            <h1 style="font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px;">The Archives</h1>
+            <p style="color: var(--text-muted); font-size: 18px; margin-bottom: 30px;">Track global coins, comics, stamps, and relics.<br>Secure. Private. Hosted in India.</p>
+            <button id="login-btn" class="btn" style="background: white; color: black; border: 1px solid var(--border); font-size: 16px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="width: 18px; vertical-align: middle; margin-right: 8px;"> 
+                Unlock Archives
+            </button>
+        </div>
+    </div>
 
-.footer { margin-top: 60px; padding: 30px 20px; background: var(--panel); border-top: 1px solid var(--border); text-align: center; }
-.manifesto { max-width: 600px; margin: 0 auto 15px auto; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+    <div id="view-app" class="view">
+        <nav class="nav">
+            <div class="container flex-between" style="padding: 0;">
+                <div class="nav-logo">Archives.</div>
+                <div class="profile-pill" id="logout-btn">
+                    <img id="user-avatar" class="avatar" src="">
+                    <span style="font-weight: 600; font-size: 14px;" id="user-name">User</span>
+                    <span class="logout-icon">🚪</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="milestone-bar" id="milestone-bar">
+                <div class="container-lock unlocked active-container" data-target="desk">
+                    <div style="font-size: 24px;">🪑</div>
+                    <div class="lock-title">Desk (0)</div>
+                </div>
+                <div class="container-lock" id="lock-diary" data-target="diary">
+                    <div style="font-size: 24px;">📓</div>
+                    <div class="lock-title">Diary (5 Items)</div>
+                </div>
+                <div class="container-lock" id="lock-box" data-target="box">
+                    <div style="font-size: 24px;">📦</div>
+                    <div class="lock-title">Wood Box (15)</div>
+                </div>
+                <div class="container-lock" id="lock-suitcase" data-target="suitcase">
+                    <div style="font-size: 24px;">🧳</div>
+                    <div class="lock-title">Suitcase (30)</div>
+                </div>
+            </div>
+
+            <div class="flex-between" style="margin-bottom: 20px;">
+                <div>
+                    <h1 style="font-size: 28px; font-weight: 800;">My Collection</h1>
+                    <p style="color: var(--text-muted); font-size: 14px;">Total Value: <strong id="total-value" style="color: var(--text-main);">₹0</strong></p>
+                </div>
+                <button class="btn" onclick="window.openAddModal()">+ Log Item</button>
+            </div>
+
+            <div id="grid" class="grid"></div>
+        </div>
+    </div>
+
+    <div id="modal-add" class="modal">
+        <div class="modal-content">
+            <div class="flex-between" style="margin-bottom: 20px;">
+                <h2 style="font-size: 20px;">Catalog Artifact</h2>
+                <button onclick="document.getElementById('modal-add').classList.remove('active')" style="background:none; border:none; color: var(--text-muted); font-size:24px; cursor:pointer;">&times;</button>
+            </div>
+
+            <div class="input-group">
+                <label>Item Type</label>
+                <select id="inp-type" onchange="window.toggleFormFields()">
+                    <option value="Coin">Coin / Currency</option>
+                    <option value="Note">Banknote</option>
+                    <option value="Card">Card / Sticker / Comic</option>
+                    <option value="Stamp">Postage Stamp</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Name / Title</label>
+                <input type="text" id="inp-name" placeholder="e.g. Silver Rupee, Holographic Charizard">
+            </div>
+
+            <div id="group-currency" class="dyn-group active">
+                <div class="flex-between" style="gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
+                        <label>Country (Emoji)</label>
+                        <input type="text" id="inp-flag" placeholder="🇮🇳, 🇺🇸, 🇯🇵" maxlength="5">
+                    </div>
+                    <div class="input-group" style="flex: 1;">
+                        <label>Denomination</label>
+                        <input type="text" id="inp-denom" placeholder="e.g. 1, 100">
+                    </div>
+                </div>
+            </div>
+
+            <div id="group-pop" class="dyn-group">
+                <div class="input-group">
+                    <label>Franchise / Character</label>
+                    <input type="text" id="inp-franchise" placeholder="e.g. Marvel, Pokémon, Captain America">
+                </div>
+            </div>
+
+            <div class="flex-between" style="gap: 15px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>Year / Date</label>
+                    <input type="text" id="inp-year" placeholder="e.g. 1918">
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Quantity</label>
+                    <input type="number" id="inp-qty" value="1" min="1">
+                </div>
+            </div>
+
+            <div class="flex-between" style="gap: 15px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>Condition</label>
+                    <select id="inp-cond">
+                        <option value="Mint">Mint (Perfect)</option>
+                        <option value="Great">Great</option>
+                        <option value="Worn">Worn / Used</option>
+                    </select>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Est. Value (₹)</label>
+                    <input type="number" id="inp-value" placeholder="0">
+                </div>
+            </div>
+
+            <button id="save-btn" class="btn" style="width: 100%; margin-top: 10px;">Secure in Archives</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="manifesto">
+            <strong>The Collector's Manifesto:</strong> Your collection is your private business. We believe in absolute data sovereignty. We do not track your items, we do not sell your data, and we do not run ads. All collection data is securely encrypted via Firebase and processed exclusively to serve you.
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted);">
+            🔒 Data Stored Securely in Indian Servers | Built with purpose by @gorupa
+        </div>
+    </footer>
+
+    <script type="module">
+        import { auth, provider, db } from "./js/firebase-config.js";
+        import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+        import { doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+        const viewLogin = document.getElementById('view-login');
+        const viewApp = document.getElementById('view-app');
+        const grid = document.getElementById('grid');
+
+        let currentUser = null;
+        let collection = [];
+
+        // --- 1. AUTHENTICATION & PROFILE ---
+        document.getElementById('login-btn').addEventListener('click', () => signInWithPopup(auth, provider));
+        document.getElementById('logout-btn').addEventListener('click', () => signOut(auth));
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                currentUser = user;
+                document.getElementById('user-name').innerText = user.displayName.split(' ')[0];
+                document.getElementById('user-avatar').src = user.photoURL;
+                
+                viewLogin.classList.remove('active');
+                viewApp.classList.add('active');
+                await fetchData();
+            } else {
+                currentUser = null;
+                viewApp.classList.remove('active');
+                viewLogin.classList.add('active');
+            }
+        });
+
+        // --- 2. DATA SYNC ---
+        async function fetchData() {
+            grid.innerHTML = `<p style="text-align:center; color:#666; width:100%;">Opening archives...</p>`;
+            try {
+                const ref = doc(db, "users", currentUser.uid);
+                const snap = await getDoc(ref);
+                if (!snap.exists()) {
+                    await setDoc(ref, { items: [] });
+                    collection = [];
+                } else {
+                    collection = snap.data().items || [];
+                }
+                checkMilestones();
+                renderGrid();
+            } catch (e) {
+                grid.innerHTML = `<p style="color:red; text-align:center; width:100%;">Failed to load data. Ensure Firestore rules allow read/write.</p>`;
+            }
+        }
+
+        // --- 3. DYNAMIC FORM & MILESTONES ---
+        window.openAddModal = function() {
+            document.getElementById('modal-add').classList.add('active');
+            window.toggleFormFields();
+        }
+
+        window.toggleFormFields = function() {
+            const type = document.getElementById('inp-type').value;
+            document.getElementById('group-currency').classList.remove('active');
+            document.getElementById('group-pop').classList.remove('active');
+
+            if (type === 'Coin' || type === 'Note') document.getElementById('group-currency').classList.add('active');
+            if (type === 'Card') document.getElementById('group-pop').classList.add('active');
+        }
+
+        function checkMilestones() {
+            const count = collection.length;
+            const lDiary = document.getElementById('lock-diary');
+            const lBox = document.getElementById('lock-box');
+            const lSuit = document.getElementById('lock-suitcase');
+
+            if (count >= 5) lDiary.classList.add('unlocked');
+            if (count >= 15) lBox.classList.add('unlocked');
+            if (count >= 30) lSuit.classList.add('unlocked');
+        }
+
+        document.querySelectorAll('.container-lock').forEach(el => {
+            el.addEventListener('click', () => {
+                if (!el.classList.contains('unlocked')) {
+                    alert("Log more items to unlock this storage container!");
+                    return;
+                }
+                document.querySelectorAll('.container-lock').forEach(c => c.classList.remove('active-container'));
+                el.classList.add('active-container');
+                document.body.setAttribute('data-container', el.getAttribute('data-target'));
+            });
+        });
+
+        // --- 4. RARITY ENGINE ---
+        function calculateRarity(qty, value, condition) {
+            let score = 0;
+            if (qty === 1) score += 50;
+            if (qty > 1 && qty < 5) score += 20;
+            if (value > 5000) score += 30;
+            if (value > 20000) score += 50;
+            if (condition === "Mint") score += 20;
+
+            if (score >= 100) return { label: "🏆 GRAIL", class: "rare-grail" };
+            if (score >= 70) return { label: "🔷 RARE", class: "rare-rare" };
+            if (score >= 40) return { label: "🟢 UNCOMMON", class: "rare-uncommon" };
+            return { label: "⚪ COMMON", class: "rare-common" };
+        }
+
+        // --- 5. TACTILE RENDERING ---
+        function renderGrid() {
+            grid.innerHTML = '';
+            let totalValue = 0;
+
+            if (collection.length === 0) {
+                grid.innerHTML = `<p style="text-align:center; color:#666; grid-column:1/-1; padding:40px;">No items logged yet. Begin your archive.</p>`;
+            }
+
+            collection.forEach((item, index) => {
+                totalValue += Number(item.value);
+                const rarity = calculateRarity(item.qty, item.value, item.condition);
+                
+                let physicalHtml = "";
+
+                if (item.type === "Coin") {
+                    physicalHtml = `
+                        <div class="item-coin">
+                            <div class="coin-flag">${item.flag || '🌍'}</div>
+                            <div class="coin-value">${item.denom || '-'}</div>
+                        </div>`;
+                } else if (item.type === "Note") {
+                    physicalHtml = `
+                        <div class="item-note">
+                            <div class="note-corners"><span>${item.denom || ''}</span><span>${item.denom || ''}</span></div>
+                            <div class="note-center">${item.flag || '🌍'}</div>
+                            <div class="note-corners"><span>${item.denom || ''}</span><span>${item.denom || ''}</span></div>
+                        </div>`;
+                } else if (item.type === "Card") {
+                    physicalHtml = `
+                        <div class="item-sticker">
+                            <div class="sticker-franchise">${item.franchise || item.name}</div>
+                        </div>`;
+                } else if (item.type === "Stamp") {
+                    physicalHtml = `
+                        <div class="item-stamp">
+                            <div class="stamp-inner">${item.flag || '✉️'}</div>
+                        </div>`;
+                }
+
+                const div = document.createElement('div');
+                div.className = "item-wrapper";
+                div.innerHTML = `
+                    <div class="item-qty">${item.qty}x</div>
+                    ${physicalHtml}
+                    <div class="item-rarity ${rarity.class}">${rarity.label}</div>
+                    
+                    <div class="item-details-tag">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-meta">${item.year || 'Unknown'} • ${item.condition}</div>
+                        <div class="item-meta" style="color:var(--accent);">₹${Number(item.value).toLocaleString()}</div>
+                        <button onclick="window.removeItem(${index})" style="background:none; border:none; color:var(--danger); font-size:12px; font-weight:600; cursor:pointer; margin-top:4px;">Remove</button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+
+            document.getElementById('total-value').innerText = `₹${totalValue.toLocaleString()}`;
+        }
+
+        // --- 6. LOGGING NEW ITEMS ---
+        document.getElementById('save-btn').addEventListener('click', async () => {
+            const type = document.getElementById('inp-type').value;
+            const name = document.getElementById('inp-name').value;
+            const qty = parseInt(document.getElementById('inp-qty').value) || 1;
+            const condition = document.getElementById('inp-cond').value;
+            const value = parseInt(document.getElementById('inp-value').value) || 0;
+            const year = document.getElementById('inp-year').value;
+
+            if (!name) return alert("Item requires a name.");
+
+            let newItem = { type, name, qty, condition, value, year };
+
+            if (type === 'Coin' || type === 'Note') {
+                newItem.flag = document.getElementById('inp-flag').value;
+                newItem.denom = document.getElementById('inp-denom').value;
+            } else if (type === 'Card') {
+                newItem.franchise = document.getElementById('inp-franchise').value;
+            }
+
+            collection.push(newItem);
+
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid), { items: collection });
+                document.getElementById('modal-add').classList.remove('active');
+                
+                document.getElementById('inp-name').value = '';
+                document.getElementById('inp-value').value = '';
+                document.getElementById('inp-qty').value = '1';
+                document.getElementById('inp-flag').value = '';
+                document.getElementById('inp-denom').value = '';
+                document.getElementById('inp-franchise').value = '';
+                document.getElementById('inp-year').value = '';
+                
+                checkMilestones();
+                renderGrid();
+            } catch (e) { alert("Error saving to Archives. Check console."); console.error(e); }
+        });
+
+        window.removeItem = async (index) => {
+            if(confirm("Delete this item from your archives?")) {
+                collection.splice(index, 1);
+                await updateDoc(doc(db, "users", currentUser.uid), { items: collection });
+                checkMilestones();
+                renderGrid();
+            }
+        }
+    </script>
+</body>
+</html>
