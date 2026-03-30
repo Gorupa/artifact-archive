@@ -3,85 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Artifact Archive</title>
+    <title>Collector's Desk</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <div id="view-login" class="view active">
-        <div style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-            <p style="color: var(--gold); letter-spacing: 4px; text-transform: uppercase; font-size: 14px; margin-bottom: 20px;">Private Collection Manager</p>
-            <h1 class="serif" style="font-size: 56px; margin-bottom: 20px; line-height: 1.1;">The Artifact Archive</h1>
-            <p style="font-size: 18px; color: var(--text-muted); max-width: 500px; margin-bottom: 40px; font-weight: 300; line-height: 1.6;">
-                Your collection deserves a museum, not a cardboard box. Digitize, appraise, and showcase your greatest artifacts.
-            </p>
-            <button id="login-btn" class="btn-gold" style="font-size: 18px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="width: 18px; vertical-align: middle; margin-right: 10px; filter: grayscale(100%) brightness(0%);"> 
-                Unlock the Vault
+        <div class="container" style="text-align: center; margin-top: 15vh;">
+            <div style="font-size: 48px; margin-bottom: 10px;">📦</div>
+            <h1 style="font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px;">Collector's Desk</h1>
+            <p style="color: var(--text-muted); font-size: 18px; margin-bottom: 30px;">Track your coins, notes, and stickers. <br>100% private. Hosted in India.</p>
+            
+            <button id="login-btn" class="btn" style="background: white; color: black; border: 1px solid var(--border); font-size: 16px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="width: 18px; vertical-align: middle; margin-right: 8px;"> 
+                Enter Desk
             </button>
         </div>
     </div>
 
     <div id="view-app" class="view">
-        <nav class="museum-nav">
-            <div class="nav-logo serif">The Archive</div>
-            <div style="display: flex; gap: 16px; align-items: center;">
-                <span id="profile-name" style="font-size: 14px; color: var(--text-muted);">Curator</span>
-                <button id="logout-btn" class="btn-dark" style="font-size: 12px;">Lock Vault</button>
+        <nav class="nav">
+            <div class="container flex-between" style="padding: 0;">
+                <div class="nav-logo">Desk.</div>
+                <div class="profile-pill" id="logout-btn">
+                    <img id="user-avatar" class="avatar" src="">
+                    <span style="font-weight: 600; font-size: 14px;" id="user-name">User</span>
+                    <span class="logout-icon">🚪</span>
+                </div>
             </div>
         </nav>
 
         <div class="container">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px;">
+            <div class="flex-between" style="margin-bottom: 20px;">
                 <div>
-                    <h1 class="serif" style="font-size: 40px; margin-bottom: 8px;">My Collection</h1>
-                    <p style="color: var(--text-muted); font-weight: 300;">Total Estimated Value: <span id="total-value" class="value-highlight">₹0</span></p>
+                    <h1 style="font-size: 28px; font-weight: 800;">My Collection</h1>
+                    <p style="color: var(--text-muted); font-size: 14px;">Total Est. Value: <strong id="total-value" style="color: var(--text-main);">₹0</strong></p>
                 </div>
-                <button class="btn-gold" onclick="document.getElementById('modal-add').classList.add('active')">+ Log Artifact</button>
+                <button class="btn" onclick="document.getElementById('modal-add').classList.add('active')">+ Log Item</button>
             </div>
 
-            <div id="artifact-grid" class="artifact-grid">
-                </div>
+            <div id="grid" class="grid"></div>
         </div>
     </div>
 
-    <div id="modal-add" class="modal-overlay">
+    <div id="modal-add" class="modal">
         <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
-                <h2 class="serif">Catalog New Item</h2>
-                <button onclick="document.getElementById('modal-add').classList.remove('active')" style="background: none; border: none; color: #FFF; font-size: 24px; cursor: pointer;">&times;</button>
+            <div class="flex-between" style="margin-bottom: 20px;">
+                <h2 style="font-size: 20px;">Log New Item</h2>
+                <button onclick="document.getElementById('modal-add').classList.remove('active')" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
             </div>
             
-            <div class="input-group">
-                <label>Artifact Name</label>
-                <input type="text" id="art-name" placeholder="e.g., Amazing Fantasy #15">
-            </div>
-            
-            <div class="input-group">
-                <label>Category</label>
-                <select id="art-category">
-                    <option value="Comic Book">Comic Book</option>
-                    <option value="Trading Card">Trading Card</option>
-                    <option value="Action Figure">Action Figure</option>
-                    <option value="Antique/Relic">Antique/Relic</option>
-                    <option value="Watch/Jewelry">Watch/Jewelry</option>
-                </select>
-            </div>
-
-            <div style="display: flex; gap: 16px;">
-                <div class="input-group" style="flex: 1;">
-                    <label>Purchase Price (₹)</label>
-                    <input type="number" id="art-paid" placeholder="0">
+            <div class="flex-between" style="gap: 15px;">
+                <div class="input-group" style="flex: 2;">
+                    <label>Item Name</label>
+                    <input type="text" id="inp-name" placeholder="e.g. 1918 Silver Rupee">
                 </div>
                 <div class="input-group" style="flex: 1;">
-                    <label>Est. Market Value (₹)</label>
-                    <input type="number" id="art-value" placeholder="0">
+                    <label>Quantity</label>
+                    <input type="number" id="inp-qty" value="1" min="1">
                 </div>
             </div>
 
-            <button id="save-btn" class="btn-gold" style="width: 100%; margin-top: 10px;">Secure in Vault</button>
+            <div class="flex-between" style="gap: 15px;">
+                <div class="input-group" style="flex: 1;">
+                    <label>Type</label>
+                    <select id="inp-type">
+                        <option value="Coin">Coin</option>
+                        <option value="Note">Banknote</option>
+                        <option value="Sticker">Sticker / Stamp</option>
+                    </select>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label>Condition</label>
+                    <select id="inp-cond">
+                        <option value="Mint">Mint (Perfect)</option>
+                        <option value="Great">Great</option>
+                        <option value="Circulated">Circulated (Worn)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Total Est. Value (₹)</label>
+                <input type="number" id="inp-value" placeholder="Current market price">
+            </div>
+
+            <button id="save-btn" class="btn" style="width: 100%; margin-top: 10px; background: var(--accent);">Save to Desk</button>
         </div>
     </div>
+
+    <footer class="footer">
+        <div class="manifesto">
+            <strong>The Collector's Manifesto:</strong> Your collection is your private business. We believe in absolute data sovereignty. We do not track your items, we do not sell your data, and we do not run ads. All collection data is securely encrypted via Firebase and processed exclusively to serve you.
+        </div>
+        <div style="font-size: 12px; font-weight: 600; color: #111;">
+            🔒 Data Stored Securely in Indian Servers | Built with purpose by <a href="https://github.com/gorupa" style="color: var(--accent); text-decoration: none;">@gorupa</a>
+        </div>
+    </footer>
 
     <script type="module" src="js/app.js"></script>
 </body>
