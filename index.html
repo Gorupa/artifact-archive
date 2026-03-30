@@ -1,106 +1,122 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collector's Desk</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap');
 
-    <div id="view-login" class="view active">
-        <div class="container" style="text-align: center; margin-top: 15vh;">
-            <div style="font-size: 48px; margin-bottom: 10px;">📦</div>
-            <h1 style="font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px;">Collector's Desk</h1>
-            <p style="color: var(--text-muted); font-size: 18px; margin-bottom: 30px;">Track your coins, notes, and stickers. <br>100% private. Hosted in India.</p>
-            
-            <button id="login-btn" class="btn" style="background: white; color: black; border: 1px solid var(--border); font-size: 16px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="width: 18px; vertical-align: middle; margin-right: 8px;"> 
-                Enter Desk
-            </button>
-        </div>
-    </div>
+:root {
+    /* Default Desk Theme */
+    --bg-surface: #F0F2F5; 
+    --text-main: #111827;
+    --text-muted: #6B7280;
+    --accent: #3B82F6;
+    --danger: #EF4444;
+    --border: #E5E7EB;
+    --panel: #FFFFFF;
+}
 
-    <div id="view-app" class="view">
-        <nav class="nav">
-            <div class="container flex-between" style="padding: 0;">
-                <div class="nav-logo">Desk.</div>
-                <div class="profile-pill" id="logout-btn">
-                    <img id="user-avatar" class="avatar" src="">
-                    <span style="font-weight: 600; font-size: 14px;" id="user-name">User</span>
-                    <span class="logout-icon">🚪</span>
-                </div>
-            </div>
-        </nav>
+/* Container Themes (Unlocked via Milestones) */
+body[data-container="desk"] { --bg-surface: #F0F2F5; }
+body[data-container="diary"] { --bg-surface: #Fdfbf7; background-image: repeating-linear-gradient(transparent, transparent 29px, #e5e7eb 30px); }
+body[data-container="box"] { --bg-surface: #3e2723; --text-main: #f5f5f5; --text-muted: #bcaaa4; --panel: #4e342e; --border: #5d4037; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 40px); }
+body[data-container="suitcase"] { --bg-surface: #263238; --text-main: #eceff1; --text-muted: #90a4ae; --panel: #37474f; --border: #455a64; background-image: radial-gradient(#111 15%, transparent 16%); background-size: 8px 8px; }
 
-        <div class="container">
-            <div class="flex-between" style="margin-bottom: 20px;">
-                <div>
-                    <h1 style="font-size: 28px; font-weight: 800;">My Collection</h1>
-                    <p style="color: var(--text-muted); font-size: 14px;">Total Est. Value: <strong id="total-value" style="color: var(--text-main);">₹0</strong></p>
-                </div>
-                <button class="btn" onclick="document.getElementById('modal-add').classList.add('active')">+ Log Item</button>
-            </div>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+body { background-color: var(--bg-surface); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; transition: background 0.5s ease; min-height: 100vh; }
 
-            <div id="grid" class="grid"></div>
-        </div>
-    </div>
+/* --- Views & Layout --- */
+.view { display: none; opacity: 0; transition: opacity 0.3s ease; }
+.view.active { display: block; opacity: 1; animation: popIn 0.4s ease forwards; }
+@keyframes popIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
-    <div id="modal-add" class="modal">
-        <div class="modal-content">
-            <div class="flex-between" style="margin-bottom: 20px;">
-                <h2 style="font-size: 20px;">Log New Item</h2>
-                <button onclick="document.getElementById('modal-add').classList.remove('active')" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
-            </div>
-            
-            <div class="flex-between" style="gap: 15px;">
-                <div class="input-group" style="flex: 2;">
-                    <label>Item Name</label>
-                    <input type="text" id="inp-name" placeholder="e.g. 1918 Silver Rupee">
-                </div>
-                <div class="input-group" style="flex: 1;">
-                    <label>Quantity</label>
-                    <input type="number" id="inp-qty" value="1" min="1">
-                </div>
-            </div>
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
 
-            <div class="flex-between" style="gap: 15px;">
-                <div class="input-group" style="flex: 1;">
-                    <label>Type</label>
-                    <select id="inp-type">
-                        <option value="Coin">Coin</option>
-                        <option value="Note">Banknote</option>
-                        <option value="Sticker">Sticker / Stamp</option>
-                    </select>
-                </div>
-                <div class="input-group" style="flex: 1;">
-                    <label>Condition</label>
-                    <select id="inp-cond">
-                        <option value="Mint">Mint (Perfect)</option>
-                        <option value="Great">Great</option>
-                        <option value="Circulated">Circulated (Worn)</option>
-                    </select>
-                </div>
-            </div>
+/* --- Intuitive Navbar --- */
+.nav { background: var(--panel); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; transition: background 0.5s; }
+.nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.profile-pill { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.05); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
+.profile-pill:hover { background: rgba(0,0,0,0.1); }
+.avatar { width: 32px; height: 32px; border-radius: 50%; }
 
-            <div class="input-group">
-                <label>Total Est. Value (₹)</label>
-                <input type="number" id="inp-value" placeholder="Current market price">
-            </div>
+/* --- Milestone Tracker --- */
+.milestone-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; gap: 12px; overflow-x: auto; }
+.container-lock { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; text-align: center; border: 2px dashed var(--border); opacity: 0.5; transition: 0.3s; position: relative; }
+.container-lock.unlocked { border: 2px solid var(--accent); opacity: 1; cursor: pointer; background: rgba(59, 130, 246, 0.05); }
+.container-lock.active-container { background: var(--accent); color: white; border-style: solid; }
+.lock-icon { font-size: 24px; margin-bottom: 8px; }
+.lock-title { font-size: 12px; font-weight: 700; text-transform: uppercase; }
 
-            <button id="save-btn" class="btn" style="width: 100%; margin-top: 10px; background: var(--accent);">Save to Desk</button>
-        </div>
-    </div>
+/* --- Buttons --- */
+.btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
-    <footer class="footer">
-        <div class="manifesto">
-            <strong>The Collector's Manifesto:</strong> Your collection is your private business. We believe in absolute data sovereignty. We do not track your items, we do not sell your data, and we do not run ads. All collection data is securely encrypted via Firebase and processed exclusively to serve you.
-        </div>
-        <div style="font-size: 12px; font-weight: 600; color: #111;">
-            🔒 Data Stored Securely in Indian Servers | Built with purpose by <a href="https://github.com/gorupa" style="color: var(--accent); text-decoration: none;">@gorupa</a>
-        </div>
-    </footer>
+/* --- PHYSICAL COLLECTIBLE SHAPES --- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 24px; }
+.item-wrapper { position: relative; cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; }
+.item-wrapper:hover { transform: translateY(-4px); z-index: 10; }
 
-    <script type="module" src="js/app.js"></script>
-</body>
-</html>
+/* 1. Generic Legal Coin */
+.item-coin {
+    width: 150px; height: 150px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.4), inset 0 0 2px 4px rgba(255,255,255,0.3), 0 8px 15px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; border: 3px solid #da9a00;
+}
+.coin-flag { font-size: 32px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); margin-bottom: 4px; }
+.coin-value { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #4a3600; text-shadow: 1px 1px 0px rgba(255,255,255,0.4); }
+
+/* 2. Generic Legal Banknote */
+.item-note {
+    width: 220px; height: 105px; border-radius: 2px;
+    background: #eef2eb; /* Money paper */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    border: 1px solid #cdd5c5; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 22px);
+}
+.note-corners { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-weight: 700; color: #2e4a23; font-size: 14px; }
+.note-center { text-align: center; font-size: 28px; filter: grayscale(20%); }
+
+/* 3. Pop-Culture Sticker/Card */
+.item-sticker {
+    width: 140px; height: 190px; border-radius: 8px;
+    background: linear-gradient(135deg, #FF0055 0%, #0011FF 100%);
+    border: 5px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden;
+}
+.item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent); }
+.sticker-franchise { font-family: 'Bangers', sans-serif; font-size: 24px; color: white; text-transform: uppercase; text-shadow: 2px 2px 0 #000; transform: rotate(-5deg); z-index: 2; text-align: center; line-height: 1; padding: 0 10px; }
+
+/* 4. Stamp (World Record / Global) */
+.item-stamp {
+    width: 120px; height: 140px; background: #fff;
+    padding: 8px; display: flex; flex-direction: column; justify-content: space-between;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    /* CSS Perforated Edges */
+    background-image: radial-gradient(#fff 50%, transparent 50%); background-size: 10px 10px; background-position: -5px -5px;
+    border: 4px dashed #ccc;
+}
+.stamp-inner { background: #1a365d; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; color: white; font-family: 'Space Mono'; font-size: 20px; }
+
+/* Universal Item Info Base */
+.item-details-tag { margin-top: 12px; text-align: center; width: 100%; }
+.item-name { font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--text-main); }
+.item-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: var(--panel); font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+.item-rarity { position: absolute; bottom: 45px; background: var(--panel); color: var(--text-main); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
+
+.rare-common { color: #6B7280; }
+.rare-uncommon { color: #10B981; }
+.rare-rare { color: #3B82F6; }
+.rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: rgba(139, 92, 246, 0.1); }
+
+/* --- Modals --- */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
+.modal.active { display: flex; }
+.modal-content { background: var(--panel); color: var(--text-main); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
+.input-group { margin-bottom: 16px; }
+.input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+.input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); border-radius: 6px; outline: none; font-size: 15px; }
+
+/* Dynamic Form Groups */
+.dyn-group { display: none; }
+.dyn-group.active { display: block; animation: popIn 0.3s ease; }
+
+.footer { margin-top: 60px; padding: 30px 20px; background: var(--panel); border-top: 1px solid var(--border); text-align: center; }
+.manifesto { max-width: 600px; margin: 0 auto 15px auto; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
