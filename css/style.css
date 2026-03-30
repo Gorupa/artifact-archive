@@ -1,17 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap');
 
 :root {
-    --bg-desk: #F0F2F5;
-    --surface: #FFFFFF;
+    /* Default Desk Theme */
+    --bg-surface: #F0F2F5; 
     --text-main: #111827;
     --text-muted: #6B7280;
     --accent: #3B82F6;
     --danger: #EF4444;
     --border: #E5E7EB;
+    --panel: #FFFFFF;
 }
 
+/* Container Themes (Unlocked via Milestones) */
+body[data-container="desk"] { --bg-surface: #F0F2F5; }
+body[data-container="diary"] { --bg-surface: #Fdfbf7; background-image: repeating-linear-gradient(transparent, transparent 29px, #e5e7eb 30px); }
+body[data-container="box"] { --bg-surface: #3e2723; --text-main: #f5f5f5; --text-muted: #bcaaa4; --panel: #4e342e; --border: #5d4037; background-image: repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 40px); }
+body[data-container="suitcase"] { --bg-surface: #263238; --text-main: #eceff1; --text-muted: #90a4ae; --panel: #37474f; --border: #455a64; background-image: radial-gradient(#111 15%, transparent 16%); background-size: 8px 8px; }
+
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-body { background-color: var(--bg-desk); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; }
+body { background-color: var(--bg-surface); color: var(--text-main); line-height: 1.5; padding-bottom: 60px; transition: background 0.5s ease; min-height: 100vh; }
 
 /* --- Views & Layout --- */
 .view { display: none; opacity: 0; transition: opacity 0.3s ease; }
@@ -22,68 +29,94 @@ body { background-color: var(--bg-desk); color: var(--text-main); line-height: 1
 .flex-between { display: flex; justify-content: space-between; align-items: center; }
 
 /* --- Intuitive Navbar --- */
-.nav { background: var(--surface); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+.nav { background: var(--panel); padding: 12px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; transition: background 0.5s; }
 .nav-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-.profile-pill { display: flex; align-items: center; gap: 10px; background: var(--bg-desk); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
-.profile-pill:hover { background: #E5E7EB; }
+.profile-pill { display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.05); padding: 4px 12px 4px 4px; border-radius: 50px; cursor: pointer; transition: 0.2s; }
+.profile-pill:hover { background: rgba(0,0,0,0.1); }
 .avatar { width: 32px; height: 32px; border-radius: 50%; }
-.logout-icon { font-size: 18px; }
+
+/* --- Milestone Tracker --- */
+.milestone-bar { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 24px; display: flex; gap: 12px; overflow-x: auto; }
+.container-lock { flex: 1; min-width: 120px; padding: 12px; border-radius: 6px; text-align: center; border: 2px dashed var(--border); opacity: 0.5; transition: 0.3s; position: relative; }
+.container-lock.unlocked { border: 2px solid var(--accent); opacity: 1; cursor: pointer; background: rgba(59, 130, 246, 0.05); }
+.container-lock.active-container { background: var(--accent); color: white; border-style: solid; }
+.lock-icon { font-size: 24px; margin-bottom: 8px; }
+.lock-title { font-size: 12px; font-weight: 700; text-transform: uppercase; }
 
 /* --- Buttons --- */
-.btn { background: var(--text-main); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.btn { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.15); }
 
 /* --- PHYSICAL COLLECTIBLE SHAPES --- */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; margin-top: 24px; }
-
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; margin-top: 24px; }
 .item-wrapper { position: relative; cursor: pointer; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; }
 .item-wrapper:hover { transform: translateY(-4px); z-index: 10; }
 
-/* 1. The Coin (Round, Metallic) */
+/* 1. Generic Legal Coin */
 .item-coin {
-    width: 160px; height: 160px; border-radius: 50%;
-    background: linear-gradient(135deg, #e6c27a 0%, #d4af37 50%, #aa8c2c 100%);
-    box-shadow: inset 0 0 15px rgba(0,0,0,0.3), 0 8px 15px rgba(0,0,0,0.2);
-    display: flex; justify-content: center; align-items: center; padding: 20px; text-align: center; border: 4px solid #c9a52f;
+    width: 150px; height: 150px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffd700, #b8860b);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.4), inset 0 0 2px 4px rgba(255,255,255,0.3), 0 8px 15px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; border: 3px solid #da9a00;
 }
+.coin-flag { font-size: 32px; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); margin-bottom: 4px; }
+.coin-value { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: #4a3600; text-shadow: 1px 1px 0px rgba(255,255,255,0.4); }
 
-/* 2. The Note (Paper Rectangle) */
+/* 2. Generic Legal Banknote */
 .item-note {
-    width: 220px; height: 110px; border-radius: 4px;
-    background: #f4f1e1; /* Old paper color */
+    width: 220px; height: 105px; border-radius: 2px;
+    background: #eef2eb; /* Money paper */
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    border: 1px solid #dcd8c0; padding: 15px; display: flex; flex-direction: column; justify-content: space-between;
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.02) 10px, rgba(0,0,0,0.02) 20px);
+    border: 1px solid #cdd5c5; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 12px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.02) 20px, rgba(0,0,0,0.02) 22px);
 }
+.note-corners { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-weight: 700; color: #2e4a23; font-size: 14px; }
+.note-center { text-align: center; font-size: 28px; filter: grayscale(20%); }
 
-/* 3. The Sticker (Thick white border, glossy) */
+/* 3. Pop-Culture Sticker/Card */
 .item-sticker {
-    width: 150px; height: 150px; border-radius: 12px;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-    border: 6px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-    padding: 15px; text-align: center; display: flex; align-items: center; justify-content: center;
+    width: 140px; height: 190px; border-radius: 8px;
+    background: linear-gradient(135deg, #FF0055 0%, #0011FF 100%);
+    border: 5px solid white; box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden;
 }
-.item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, transparent 50%); border-radius: 6px; }
+.item-sticker::after { content:''; position: absolute; top:0; left:0; right:0; bottom:0; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent); }
+.sticker-franchise { font-family: 'Bangers', sans-serif; font-size: 24px; color: white; text-transform: uppercase; text-shadow: 2px 2px 0 #000; transform: rotate(-5deg); z-index: 2; text-align: center; line-height: 1; padding: 0 10px; }
+
+/* 4. Stamp (World Record / Global) */
+.item-stamp {
+    width: 120px; height: 140px; background: #fff;
+    padding: 8px; display: flex; flex-direction: column; justify-content: space-between;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+    /* CSS Perforated Edges */
+    background-image: radial-gradient(#fff 50%, transparent 50%); background-size: 10px 10px; background-position: -5px -5px;
+    border: 4px dashed #ccc;
+}
+.stamp-inner { background: #1a365d; height: 100%; width: 100%; display: flex; justify-content: center; align-items: center; color: white; font-family: 'Space Mono'; font-size: 20px; }
 
 /* Universal Item Info Base */
-.item-name { font-weight: 800; font-size: 16px; line-height: 1.2; color: #111; text-shadow: 0 1px 0 rgba(255,255,255,0.5); z-index: 2; }
-.item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: white; font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
-.item-rarity { position: absolute; bottom: -15px; background: var(--surface); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
+.item-details-tag { margin-top: 12px; text-align: center; width: 100%; }
+.item-name { font-weight: 800; font-size: 14px; line-height: 1.2; color: var(--text-main); }
+.item-meta { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.item-qty { position: absolute; top: -10px; right: -10px; background: var(--text-main); color: var(--panel); font-weight: 800; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 5; }
+.item-rarity { position: absolute; bottom: 45px; background: var(--panel); color: var(--text-main); border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 5;}
 
-/* Rarity Colors */
 .rare-common { color: #6B7280; }
 .rare-uncommon { color: #10B981; }
 .rare-rare { color: #3B82F6; }
-.rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: #F3E8FF; }
+.rare-grail { color: #8B5CF6; border-color: #8B5CF6; background: rgba(139, 92, 246, 0.1); }
 
-/* --- Details Modal --- */
-.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
+/* --- Modals --- */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(2px); }
 .modal.active { display: flex; }
-.modal-content { background: var(--surface); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.modal-content { background: var(--panel); color: var(--text-main); width: 100%; max-width: 450px; border-radius: 12px; padding: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
 .input-group { margin-bottom: 16px; }
 .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-.input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; outline: none; font-size: 15px; }
+.input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); border-radius: 6px; outline: none; font-size: 15px; }
 
-/* --- Premium Footer --- */
-.footer { margin-top: 60px; padding: 30px 20px; background: var(--surface); border-top: 1px solid var(--border); text-align: center; }
+/* Dynamic Form Groups */
+.dyn-group { display: none; }
+.dyn-group.active { display: block; animation: popIn 0.3s ease; }
+
+.footer { margin-top: 60px; padding: 30px 20px; background: var(--panel); border-top: 1px solid var(--border); text-align: center; }
 .manifesto { max-width: 600px; margin: 0 auto 15px auto; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
